@@ -1,88 +1,102 @@
 ### Key Points
-- Research suggests the script `titanic_example.py` uses Python, Pandas, PySpark, SQL, and other libraries like `requests`, `io`, `os`, `SQLAlchemy`, and `reportlab` for ETL processing of the Titanic dataset.
-- It seems likely that the script contains approximately 242 lines, with various components used for data downloading, cleaning, exporting, and database operations.
-- The evidence leans toward identifying all components, their locations, usage, and potential improvements for clarity and robustness.
+- Research suggests the script `titanic_example.py` uses components from Python, Pandas, PySpark, SQL, and libraries like `requests`, `io`, `os`, and `reportlab` for ETL processing of the Titanic dataset.
+- It seems likely that the script, with 242 lines, employs these components for data downloading, cleaning, exporting, and database operations.
+- The evidence leans toward providing a comprehensive list of components with their locations, usage, purposes, basic definitions, and improvement suggestions.
 
 ### Direct Answer
 
-The script `titanic_example.py` contains 242 lines and uses multiple components across Python, Pandas, PySpark, SQL, and supporting libraries. Below, I provide a comprehensive breakdown of **all components** (functions, methods, and classes) used in the script, categorized by technology, specifying where they are used (line numbers), how they are used, their purpose, and suggestions for improvements. This extends beyond the previously corrected `print()` component to cover every identifiable component in the script.
+The script `titanic_example.py` contains 242 lines and uses various components across Python, Pandas, PySpark, SQL, and supporting libraries (`requests`, `io`, `os`, `reportlab`). Below, I provide a detailed breakdown of **all components** (functions, methods, and classes) used in the script, categorized by technology. For each component, I include:
+- **Where it is used** (line numbers),
+- **How it is used** (code context and functionality),
+- **Purpose** (why it is used in the script),
+- **Basic Definition** (a concise explanation of what the component does),
+- **Improvement Suggestions** (ways to enhance its use for robustness or efficiency).
+
+This extends the previous analyses by adding basic definitions for each component while maintaining the requested details on usage, location, and improvements.
 
 ---
 
 #### Component Breakdown by Technology
 
-The components are grouped by the technology they belong to: Python (standard library and built-in functions), Pandas, PySpark, SQL (via SQLAlchemy and SQL queries), and other libraries (`requests`, `io`, `os`, `reportlab`). Each component’s usage is detailed with line numbers, purpose, and improvement suggestions.
+The components are grouped by technology: Python (standard library and built-in functions), Pandas, PySpark, SQL (via SQLAlchemy and queries), and other libraries (`requests`, `io`, `os`, `reportlab`).
 
 ##### 1. Python Components
-These are built-in functions, standard library modules, or Python constructs used in the script.
+These include built-in functions, standard library modules, and Python constructs.
 
 - **print()**
   - **Where Used**: Lines 23, 25, 27, 29, 31, 35 (conditional, may repeat), 39, 41, 43, 47, 49, 51, 55, 63, 65, 69, 73 (conditional, may repeat), 81, 83, 89, 91, 93, 97, 99, 107, 111, 119, 121, 123, 127, 129, 131, 135, 137, 139, 143, 145, 147, 149, 151, 153, 155.
-  - **How Used**: Outputs strings (e.g., `"Downloaded titanic_raw.csv"`), DataFrames (e.g., `df.isna().sum()`), or query results (e.g., `null_counts`) to the console for progress tracking.
-  - **Purpose**: Facilitates debugging, monitors ETL steps (e.g., data loading, export completion), and displays data quality metrics (e.g., null counts).
+  - **How Used**: Outputs messages or data to the console, e.g., `print("Downloaded titanic_raw.csv")`, `print(df.isna().sum())`, or `print(null_counts)`.
+  - **Purpose**: Tracks ETL progress, displays data quality metrics (e.g., null counts), and confirms operations like exports.
+  - **Basic Definition**: A built-in Python function that outputs text or objects to the console or a specified file, used for debugging or logging.
   - **Improvement Suggestions**:
-    - Replace with `logging` module for production-grade logging: `logging.info("Message")` to support log levels and file output.
-    - Consolidate repetitive prints into a function: `def log_step(section, action): print(f"{section}: {action}")`.
-    - Add timestamps for traceability: `logging.info(f"[{datetime.now()}] {message}")`.
+    - Replace with `logging` module: `logging.info("Message")` for structured logging.
+    - Consolidate repetitive prints: `def log_step(section, action): print(f"{section}: {action}")`.
+    - Add timestamps: `logging.info(f"[{datetime.now()}] {message}")`.
 
 - **open()**
-  - **Where Used**: Line 19 (within `with` statement).
-  - **How Used**: Opens a file in write mode with UTF-8 encoding: `with open(f"{base_dir}/titanic_raw.csv", "w", encoding="utf-8") as f`.
-  - **Purpose**: Saves the downloaded dataset to `titanic_raw.csv` for subsequent processing.
+  - **Where Used**: Line 19.
+  - **How Used**: Opens a file for writing: `with open(f"{base_dir}/titanic_raw.csv", "w", encoding="utf-8") as f`.
+  - **Purpose**: Saves the downloaded dataset to a CSV file for processing.
+  - **Basic Definition**: A built-in Python function that opens a file for reading, writing, or appending, returning a file object.
   - **Improvement Suggestions**:
-    - Add error handling: Wrap in try-except to catch `IOError` or `PermissionError`.
-    - Use `pathlib.Path` for modern path handling: `Path(base_dir) / "titanic_raw.csv"`.
-    - Ensure file closure is explicit if not using `with` (though `with` is already best practice).
+    - Add error handling: `try: open(...) except IOError`.
+    - Use `pathlib.Path`: `Path(base_dir) / "titanic_raw.csv"`.
+    - Log operation: `logging.info("Opened file for writing")`.
 
 - **with**
   - **Where Used**: Line 19.
-  - **How Used**: Context manager for file operations: `with open(...) as f`.
-  - **Purpose**: Ensures the file is properly closed after writing, preventing resource leaks.
+  - **How Used**: Context manager for file handling: `with open(...) as f`.
+  - **Purpose**: Ensures the file is closed after writing, preventing resource leaks.
+  - **Basic Definition**: A Python statement that creates a context for resource management, ensuring cleanup (e.g., closing files) after execution.
   - **Improvement Suggestions**:
-    - Already optimal for file handling; consider extending to other resources (e.g., database connections) if applicable.
-    - Add logging for file operations: `logging.info("Opened file for writing")`.
+    - Optimal for file handling; extend to database connections if applicable.
+    - Log context entry/exit: `logging.debug("Entered file context")`.
 
 - **os.makedirs()**
   - **Where Used**: Lines 12, 13, 14.
-  - **How Used**: Creates directories for output: `os.makedirs(f"{base_dir}/Pandas", exist_ok=True)`.
-  - **Purpose**: Sets up directory structure for storing processed files, ensuring no errors if directories already exist (`exist_ok=True`).
+  - **How Used**: Creates output directories: `os.makedirs(f"{base_dir}/Pandas", exist_ok=True)`.
+  - **Purpose**: Sets up directory structure for storing processed files.
+  - **Basic Definition**: A function in the `os` module that creates directories recursively, with `exist_ok=True` ignoring existing directories.
   - **Improvement Suggestions**:
-    - Validate `base_dir` before creation to avoid invalid paths.
-    - Use `pathlib.Path.mkdir()` for consistency: `Path(base_dir + "/Pandas").mkdir(exist_ok=True)`.
-    - Log directory creation: `logging.info(f"Created directory {base_dir}/Pandas")`.
+    - Validate `base_dir`: `if not os.path.isabs(base_dir): raise ValueError`.
+    - Use `pathlib`: `Path(base_dir + "/Pandas").mkdir(exist_ok=True)`.
+    - Log creation: `logging.info(f"Created {base_dir}/Pandas")`.
 
 - **os.environ**
   - **Where Used**: Line 59.
   - **How Used**: Sets environment variable: `os.environ["HADOOP_HOME"] = "C:\\hadoop"`.
-  - **Purpose**: Configures Hadoop home directory for PySpark to function correctly on Windows.
+  - **Purpose**: Configures Hadoop for PySpark on Windows.
+  - **Basic Definition**: A dictionary-like object in the `os` module for accessing and modifying environment variables.
   - **Improvement Suggestions**:
-    - Move to configuration file or `.env` using `python-dotenv` for flexibility.
-    - Validate environment variable setting: Check if path exists using `os.path.exists()`.
-    - Log configuration: `logging.info("Set HADOOP_HOME for PySpark")`.
+    - Use `.env` file with `python-dotenv` for configuration.
+    - Validate path: `os.path.exists(os.environ["HADOOP_HOME"])`.
+    - Log setting: `logging.info("Set HADOOP_HOME")`.
 
 - **for**
   - **Where Used**: Lines 32, 70, 76, 78.
-  - **How Used**: Iterates over columns for checks and cleaning:
-    - Line 32: `for col in df.columns` (Pandas column checks).
-    - Line 70: `for c in spark_df.columns` (PySpark column checks).
-    - Lines 76, 78: `for c in numeric_cols` and `for c in string_cols` (PySpark cleaning).
-  - **Purpose**: Processes each column to check for special characters or apply cleaning logic (e.g., `fillna`, `replace`).
+  - **How Used**:
+    - Line 32: `for col in df.columns` – Iterates over Pandas columns.
+    - Line 70: `for c in spark_df.columns` – Iterates over PySpark columns.
+    - Lines 76, 78: `for c in numeric_cols` and `for c in string_cols` – Applies cleaning.
+  - **Purpose**: Processes columns for checks or cleaning (e.g., nulls, special characters).
+  - **Basic Definition**: A Python loop construct that iterates over a sequence (e.g., list, tuple) to perform repetitive tasks.
   - **Improvement Suggestions**:
-    - Encapsulate in functions for reusability: `def check_columns(df, cols)`.
-    - Use list comprehensions where applicable to reduce verbosity: `[df[col].isin(["?", "-", ""]).sum() for col in cols]`.
-    - Add error handling for unexpected column types: `try: df[col].dtype except AttributeError`.
+    - Encapsulate in functions: `def check_columns(df, cols)`.
+    - Use comprehensions: `[df[col].isin(["?", "-", ""]).sum() for col in cols]`.
+    - Add error handling: `try: df[col] except KeyError`.
 
 - **if**
   - **Where Used**: Lines 33, 71, 74.
-  - **How Used**: Conditional checks:
-    - Line 33: `if df[col].dtype == "object"` (Pandas string column check).
-    - Line 71: `if spark_df.schema[c].dataType.simpleString() in ["string"]` (PySpark string column check).
-    - Line 74: `if counts > 0` (PySpark special character reporting).
-  - **Purpose**: Filters columns or actions based on conditions (e.g., string type, non-zero counts).
+  - **How Used**:
+    - Line 33: `if df[col].dtype == "object"` – Checks Pandas string columns.
+    - Line 71: `if spark_df.schema[c].dataType.simpleString() in ["string"]` – Checks PySpark string columns.
+    - Line 74: `if counts > 0` – Reports special characters.
+  - **Purpose**: Filters actions based on conditions (e.g., column type, non-zero counts).
+  - **Basic Definition**: A Python conditional statement that executes code if a condition is true, with optional `else` clauses.
   - **Improvement Suggestions**:
-    - Use type hints or assertions for robustness: `assert isinstance(df, pd.DataFrame)`.
-    - Combine nested conditions for clarity: `if col_type == "string" and counts > 0`.
-    - Log conditional outcomes: `logging.debug(f"Found {counts} issues in {c}")`.
+    - Use assertions: `assert isinstance(df, pd.DataFrame)`.
+    - Combine conditions: `if col_type == "string" and counts > 0`.
+    - Log outcomes: `logging.debug(f"Found {counts} issues")`.
 
 ##### 2. Pandas Components
 These are methods and functions from the Pandas library (`import pandas as pd`).
@@ -90,503 +104,469 @@ These are methods and functions from the Pandas library (`import pandas as pd`).
 - **pd.read_csv()**
   - **Where Used**: Lines 24, 106, 134.
   - **How Used**:
-    - Line 24: `df = pd.read_csv(io.StringIO(response.text))` – Loads data from HTTP response.
-    - Line 106: `df_raw = pd.read_csv(f"{base_dir}/titanic_raw.csv")` – Loads raw CSV for SQL Server.
-    - Line 134: `df_csv = pd.read_csv(f"{base_dir}/Pandas/titanic_pandas_cleaned.csv")` – Imports cleaned CSV.
-  - **Purpose**: Reads CSV data into a DataFrame for processing, supporting various input sources (file, string buffer).
+    - Line 24: `pd.read_csv(io.StringIO(response.text))` – Loads from HTTP response.
+    - Line 106: `pd.read_csv(f"{base_dir}/titanic_raw.csv")` – Loads raw CSV.
+    - Line 134: `pd.read_csv(f"{base_dir}/Pandas/titanic_pandas_cleaned.csv")` – Imports cleaned CSV.
+  - **Purpose**: Reads CSV data into a DataFrame.
+  - **Basic Definition**: A Pandas function that reads a CSV file or string into a DataFrame, supporting various formats and options.
   - **Improvement Suggestions**:
-    - Add error handling: `try: pd.read_csv(...) except pd.errors.ParserError`.
-    - Specify dtypes for efficiency: `pd.read_csv(..., dtype={"Age": float})`.
-    - Use chunking for large files: `pd.read_csv(..., chunksize=1000)`.
+    - Handle errors: `try: pd.read_csv(...) except pd.errors.ParserError`.
+    - Specify dtypes: `dtype={"Age": float}`.
+    - Use chunks: `chunksize=1000`.
 
 - **df.isna()**
   - **Where Used**: Lines 27, 43.
-  - **How Used**: `df.isna().sum()` – Checks for null values in DataFrame columns.
-  - **Purpose**: Identifies missing values to guide cleaning (e.g., replacing nulls with 0 or "Unknown").
+  - **How Used**: `df.isna().sum()` – Counts nulls per column.
+  - **Purpose**: Identifies missing values for cleaning.
+  - **Basic Definition**: A DataFrame method that returns a boolean mask marking null values (`NaN`, `None`).
   - **Improvement Suggestions**:
-    - Cache results for repeated checks: `nulls = df.isna()`.
-    - Log null counts: `logging.info(f"Nulls: {df.isna().sum().to_dict()}")`.
-    - Use `isnull()` alias for consistency if preferred.
+    - Cache results: `nulls = df.isna()`.
+    - Log nulls: `logging.info(f"Nulls: {nulls.sum()}")`.
+    - Use `isnull()` alias for consistency.
 
 - **df.select_dtypes()**
   - **Where Used**: Lines 36, 37.
   - **How Used**:
-    - `numeric_cols = df.select_dtypes(include=["int64", "float64"]).columns`
-    - `string_cols = df.select_dtypes(include=["object"]).columns`
-  - **Purpose**: Filters columns by data type (numeric or string) for targeted cleaning.
+    - `df.select_dtypes(include=["int64", "float64"]).columns`
+    - `df.select_dtypes(include=["object"]).columns`
+  - **Purpose**: Filters columns by type for cleaning.
+  - **Basic Definition**: A DataFrame method that selects columns based on specified data types (e.g., `int64`, `object`).
   - **Improvement Suggestions**:
-    - Validate column selection: `assert len(numeric_cols) > 0, "No numeric columns found"`.
-    - Use broader type categories: `include=np.number` for all numeric types.
-    - Log selected columns: `logging.debug(f"Numeric cols: {numeric_cols}")`.
+    - Validate selection: `assert len(numeric_cols) > 0`.
+    - Use `np.number` for broader types.
+    - Log columns: `logging.debug(f"Numeric: {numeric_cols}")`.
 
 - **df.fillna()**
   - **Where Used**: Line 38.
-  - **How Used**: `df[numeric_cols] = df[numeric_cols].fillna(0)` and `df[string_cols] = df[string_cols].fillna("Unknown")`.
-  - **Purpose**: Replaces null values with 0 for numeric columns and "Unknown" for string columns.
+  - **How Used**: `df[numeric_cols].fillna(0)`, `df[string_cols].fillna("Unknown")`.
+  - **Purpose**: Replaces nulls with specified values.
+  - **Basic Definition**: A DataFrame method that fills missing values with a specified value or method (e.g., mean, forward fill).
   - **Improvement Suggestions**:
-    - Use dictionary for clarity: `df.fillna({"Age": 0, "Name": "Unknown"})`.
-    - Validate post-filling: `assert df[numeric_cols].isna().sum().sum() == 0`.
-    - Log filling operation: `logging.info("Filled nulls in DataFrame")`.
+    - Use dictionary: `df.fillna({"Age": 0, "Name": "Unknown"})`.
+    - Validate: `assert df.isna().sum().sum() == 0`.
+    - Log: `logging.info("Filled nulls")`.
 
 - **df.replace()**
   - **Where Used**: Line 38.
-  - **How Used**: `df[numeric_cols].replace(["?", "-"], 0)` and `df[string_cols].replace(["?", "-", ""], "Unknown")`.
-  - **Purpose**: Replaces special characters ("?", "-", "") with 0 or "Unknown" for data consistency.
+  - **How Used**: `df[numeric_cols].replace(["?", "-"], 0)`, `df[string_cols].replace(["?", "-", ""], "Unknown")`.
+  - **Purpose**: Replaces special characters for consistency.
+  - **Basic Definition**: A DataFrame method that replaces specified values with new values, supporting regex.
   - **Improvement Suggestions**:
-    - Use regex for flexibility: `df.replace({"col": r"[?-]"}, "Unknown", regex=True)`.
-    - Validate replacements: `assert not df[numeric_cols].isin(["?", "-"]).any().any()`.
-    - Log replacements: `logging.info("Replaced special characters")`.
+    - Use regex: `replace(r"[?-]", "Unknown", regex=True)`.
+    - Validate: `assert not df.isin(["?", "-"]).any().any()`.
+    - Log: `logging.info("Replaced characters")`.
 
 - **df.to_csv()**
   - **Where Used**: Lines 46, 86, 120, 150.
-  - **How Used**: Exports DataFrames to CSV:
-    - `df.to_csv(f"{base_dir}/Pandas/titanic_pandas_cleaned.csv", index=False)`
-    - `pandas_df.to_csv(f"{base_dir}/PySpark/titanic_spark_cleaned.csv", index=False)`
-    - `sql_df.to_csv(f"{base_dir}/SQL/titanic_sql_cleaned.csv", index=False)`
-    - `df_csv.to_sql("TitanicCleanedCSV", engine, if_exists="replace", index=False)` (indirectly after reading).
-  - **Purpose**: Saves cleaned data as CSV files for storage and sharing.
+  - **How Used**: `df.to_csv(f"{base_dir}/Pandas/titanic_pandas_cleaned.csv", index=False)`, etc.
+  - **Purpose**: Exports DataFrame to CSV.
+  - **Basic Definition**: A DataFrame method that writes data to a CSV file with customizable delimiters and options.
   - **Improvement Suggestions**:
-    - Add compression for large files: `to_csv(..., compression="gzip")`.
-    - Handle file overwrite errors: `try: to_csv(...) except OSError`.
-    - Log export: `logging.info("Exported CSV to {path}")`.
+    - Compress: `compression="gzip"`.
+    - Handle errors: `try: to_csv(...) except OSError`.
+    - Log: `logging.info("Exported CSV")`.
 
 - **df.to_json()**
   - **Where Used**: Lines 48, 88, 122.
-  - **How Used**: Exports to JSON:
-    - `df.to_json(f"{base_dir}/Pandas/titanic_pandas_cleaned.json", orient="records", lines=True)`
-    - `pandas_df.to_json(...)`
-    - `sql_df.to_json(...)`.
-  - **Purpose**: Saves data in JSON Lines format for interoperability.
+  - **How Used**: `df.to_json(..., orient="records", lines=True)`.
+  - **Purpose**: Exports to JSON Lines format.
+  - **Basic Definition**: A DataFrame method that writes data to a JSON file, supporting various orientations (e.g., records).
   - **Improvement Suggestions**:
-    - Validate JSON output: Check file readability post-export.
-    - Use compression: `to_json(..., compression="gzip")`.
-    - Log export: `logging.info("Exported JSON to {path}")`.
+    - Validate output: Check file readability.
+    - Compress: `compression="gzip"`.
+    - Log: `logging.info("Exported JSON")`.
 
 - **df.to_excel()**
   - **Where Used**: Lines 50, 124.
-  - **How Used**: Exports to Excel:
-    - `df.to_excel(f"{base_dir}/Pandas/titanic_pandas_cleaned.xlsx", index=False)`
-    - `sql_df.to_excel(...)`.
-  - **Purpose**: Saves data in Excel format for user-friendly access.
+  - **How Used**: `df.to_excel(..., index=False)`.
+  - **Purpose**: Exports to Excel.
+  - **Basic Definition**: A DataFrame method that writes data to an Excel file using engines like `openpyxl`.
   - **Improvement Suggestions**:
-    - Specify engine explicitly: `to_excel(..., engine="openpyxl")`.
-    - Handle large datasets with `xlsxwriter` for performance.
-    - Log export: `logging.info("Exported Excel to {path}")`.
+    - Specify engine: `engine="openpyxl"`.
+    - Optimize: Use `xlsxwriter` for large data.
+    - Log: `logging.info("Exported Excel")`.
 
 - **pd.read_json()**
   - **Where Used**: Line 136.
-  - **How Used**: `df_json = pd.read_json(f"{base_dir}/Pandas/titanic_pandas_cleaned.json", lines=True)`.
-  - **Purpose**: Re-imports cleaned JSON data for verification.
+  - **How Used**: `pd.read_json(..., lines=True)`.
+  - **Purpose**: Re-imports cleaned JSON.
+  - **Basic Definition**: A Pandas function that reads JSON data into a DataFrame, supporting JSON Lines.
   - **Improvement Suggestions**:
-    - Handle JSON parsing errors: `try: pd.read_json(...) except ValueError`.
+    - Handle errors: `try: pd.read_json(...) except ValueError`.
     - Validate schema: `assert df_json.columns.equals(df.columns)`.
-    - Log import: `logging.info("Imported JSON from {path}")`.
+    - Log: `logging.info("Imported JSON")`.
 
 - **pd.read_excel()**
   - **Where Used**: Line 138.
-  - **How Used**: `df_excel = pd.read_excel(f"{base_dir}/Pandas/titanic_pandas_cleaned.xlsx")`.
-  - **Purpose**: Re-imports cleaned Excel data for verification.
+  - **How Used**: `pd.read_excel(...)`.
+  - **Purpose**: Re-imports cleaned Excel.
+  - **Basic Definition**: A Pandas function that reads Excel files into a DataFrame using engines like `openpyxl`.
   - **Improvement Suggestions**:
-    - Specify sheet name if needed: `read_excel(..., sheet_name="Sheet1")`.
-    - Handle file corruption: `try: pd.read_excel(...) except XLRDError`.
-    - Log import: `logging.info("Imported Excel from {path}")`.
+    - Specify sheet: `sheet_name="Sheet1"`.
+    - Handle errors: `try: pd.read_excel(...) except XLRDError`.
+    - Log: `logging.info("Imported Excel")`.
 
 - **df.to_sql()**
   - **Where Used**: Lines 108, 110, 150, 152, 154.
-  - **How Used**: Loads DataFrames into SQL Server:
-    - `df_raw.to_sql("Titanic", engine, if_exists="replace", index=False)`
-    - `df.to_sql("TitanicCleaned", engine, ...)`
-    - `df_csv.to_sql("TitanicCleanedCSV", ...)`, etc.
-  - **Purpose**: Stores raw and cleaned data in SQL Server tables for persistence and querying.
+  - **How Used**: `df.to_sql("Titanic", engine, if_exists="replace", index=False)`, etc.
+  - **Purpose**: Stores data in SQL Server.
+  - **Basic Definition**: A DataFrame method that writes data to a SQL database table via SQLAlchemy.
   - **Improvement Suggestions**:
-    - Use chunks for large datasets: `to_sql(..., chunksize=1000)`.
-    - Handle connection errors: `try: to_sql(...) except SQLAlchemyError`.
-    - Log operation: `logging.info("Loaded {table} to SQL Server")`.
+    - Chunk data: `chunksize=1000`.
+    - Handle errors: `try: to_sql(...) except SQLAlchemyError`.
+    - Log: `logging.info("Loaded table")`.
 
 - **pd.read_sql()**
   - **Where Used**: Lines 118, 126.
-  - **How Used**:
-    - `null_counts = pd.read_sql(null_query, engine)` – Queries null counts.
-    - `sql_df = pd.read_sql("SELECT * FROM TitanicCleaned", engine)` – Retrieves cleaned table.
-  - **Purpose**: Executes SQL queries to fetch data for validation and export.
+  - **How Used**: `pd.read_sql(null_query, engine)`, `pd.read_sql("SELECT * FROM TitanicCleaned", engine)`.
+  - **Purpose**: Fetches SQL query results.
+  - **Basic Definition**: A Pandas function that executes a SQL query and returns results as a DataFrame.
   - **Improvement Suggestions**:
-    - Optimize queries for performance: Use indexed columns in WHERE clauses.
-    - Handle query errors: `try: pd.read_sql(...) except DatabaseError`.
-    - Log query execution: `logging.info("Executed SQL query: {query}")`.
+    - Optimize queries: Use indexed columns.
+    - Handle errors: `try: pd.read_sql(...) except DatabaseError`.
+    - Log: `logging.info("Ran query")`.
 
 ##### 3. PySpark Components
-These are methods and classes from PySpark (`from pyspark.sql import SparkSession`, `from pyspark.sql.functions import col as pyspark_col, when`).
+These are from PySpark (`from pyspark.sql import SparkSession`, `from pyspark.sql.functions import col as pyspark_col, when`).
 
 - **SparkSession.builder.appName().getOrCreate()**
   - **Where Used**: Lines 60, 142.
-  - **How Used**:
-    - `spark = SparkSession.builder.appName("TitanicExample").getOrCreate()`
-    - `spark = SparkSession.builder.appName("TitanicImport").getOrCreate()`.
-  - **Purpose**: Initializes a Spark session for distributed data processing.
+  - **How Used**: `spark = SparkSession.builder.appName("TitanicExample").getOrCreate()`.
+  - **Purpose**: Initializes Spark for processing.
+  - **Basic Definition**: A PySpark method that creates or retrieves a SparkSession, the entry point for DataFrame operations.
   - **Improvement Suggestions**:
-    - Configure Spark explicitly: `config("spark.executor.memory", "4g")`.
-    - Handle session errors: `try: getOrCreate() except SparkException`.
-    - Log session creation: `logging.info("Initialized Spark session: {appName}")`.
+    - Configure: `config("spark.executor.memory", "4g")`.
+    - Handle errors: `try: getOrCreate() except SparkException`.
+    - Log: `logging.info("Started Spark")`.
 
 - **spark.read.csv()**
   - **Where Used**: Lines 62, 144.
-  - **How Used**:
-    - `spark_df = spark.read.csv(f"{base_dir}/titanic_raw.csv", header=True, inferSchema=True)`
-    - `spark_csv = spark.read.csv(f"{base_dir}/PySpark/titanic_spark_cleaned.csv", ...)`.
-  - **Purpose**: Loads CSV data into a Spark DataFrame for processing.
+  - **How Used**: `spark.read.csv(..., header=True, inferSchema=True)`.
+  - **Purpose**: Loads CSV into Spark DataFrame.
+  - **Basic Definition**: A Spark method that reads CSV files into a DataFrame, with schema inference options.
   - **Improvement Suggestions**:
-    - Specify schema explicitly: `schema = StructType([...])`.
-    - Handle file errors: `try: spark.read.csv(...) except AnalysisException`.
-    - Log loading: `logging.info("Loaded CSV into Spark DataFrame")`.
+    - Specify schema: `schema=StructType([...])`.
+    - Handle errors: `try: read.csv(...) except AnalysisException`.
+    - Log: `logging.info("Loaded CSV")`.
 
 - **spark_df.show()**
   - **Where Used**: Line 62.
-  - **How Used**: `spark_df.show(5)` – Displays first 5 rows of the DataFrame.
-  - **Purpose**: Provides a preview of the loaded data for verification.
+  - **How Used**: `spark_df.show(5)`.
+  - **Purpose**: Displays DataFrame preview.
+  - **Basic Definition**: A DataFrame method that prints the first N rows to the console.
   - **Improvement Suggestions**:
-    - Limit output for large datasets: `show(5, truncate=True)`.
-    - Redirect to log file: Use `collect()` and log instead of console.
-    - Log preview: `logging.info("Displayed Spark DataFrame preview")`.
+    - Limit output: `show(5, truncate=True)`.
+    - Log instead: Use `collect()` and `logging`.
+    - Log: `logging.info("Displayed preview")`.
 
 - **pyspark_col()**
   - **Where Used**: Lines 66, 72, 80.
-  - **How Used**:
-    - `spark_df.select([pyspark_col(c).isNull().cast("int").alias(c) for c in spark_df.columns])`
-    - `spark_df.filter(pyspark_col(c).isin("?", "-", ""))`
-    - `when(pyspark_col(c).isin("?", "-", ""), "Unknown")`.
-  - **Purpose**: References DataFrame columns for operations like null checks and filtering.
+  - **How Used**: `pyspark_col(c).isNull()`, `pyspark_col(c).isin(...)`, `when(pyspark_col(c)...)`.
+  - **Purpose**: References columns for operations.
+  - **Basic Definition**: A PySpark function that creates a Column object for DataFrame operations.
   - **Improvement Suggestions**:
-    - Validate column existence: `assert c in spark_df.columns`.
-    - Use SQL expressions for complex logic: `spark.sql("SELECT ...")`.
-    - Log column operations: `logging.debug("Processed column {c}")`.
+    - Validate columns: `assert c in spark_df.columns`.
+    - Use SQL: `spark.sql("SELECT ...")`.
+    - Log: `logging.debug("Processed {c}")`.
 
 - **spark_df.select()**
   - **Where Used**: Lines 66, 82.
-  - **How Used**: `spark_df.select([...]).groupBy().sum()` – Selects columns for null count aggregation.
-  - **Purpose**: Prepares data for aggregation to compute null counts.
+  - **How Used**: `spark_df.select([...]).groupBy().sum()`.
+  - **Purpose**: Selects columns for aggregation.
+  - **Basic Definition**: A DataFrame method that selects specified columns for further processing.
   - **Improvement Suggestions**:
-    - Optimize selection: Select only necessary columns.
-    - Handle empty DataFrames: `if spark_df.count() > 0`.
-    - Log selection: `logging.info("Selected columns for aggregation")`.
+    - Optimize: Select minimal columns.
+    - Check data: `if spark_df.count() > 0`.
+    - Log: `logging.info("Selected columns")`.
 
 - **spark_df.groupBy().sum()**
   - **Where Used**: Lines 66, 82.
-  - **How Used**: Aggregates null counts: `groupBy().sum()`.
-  - **Purpose**: Computes sum of null indicators across columns.
+  - **How Used**: Aggregates null counts.
+  - **Purpose**: Computes null sums.
+  - **Basic Definition**: DataFrame methods that group rows and compute the sum of specified columns.
   - **Improvement Suggestions**:
-    - Use `agg()` for clarity: `agg({c: "sum" for c in cols})`.
-    - Cache results for reuse: `spark_df.cache()`.
-    - Log aggregation: `logging.info("Computed null counts")`.
+    - Use `agg()`: `agg({c: "sum"})`.
+    - Cache: `spark_df.cache()`.
+    - Log: `logging.info("Computed nulls")`.
 
 - **spark_df.filter()**
   - **Where Used**: Line 72.
-  - **How Used**: `spark_df.filter(pyspark_col(c).isin("?", "-", ""))` – Filters rows with special characters.
-  - **Purpose**: Identifies rows with problematic values for reporting.
+  - **How Used**: `spark_df.filter(pyspark_col(c).isin("?", "-", ""))`.
+  - **Purpose**: Identifies special characters.
+  - **Basic Definition**: A DataFrame method that filters rows based on a condition.
   - **Improvement Suggestions**:
-    - Use SQL for readability: `spark.sql("SELECT * WHERE col IN ('?', '-')")`.
-    - Optimize filtering: Apply only to relevant columns.
-    - Log filter results: `logging.debug("Filtered {count} rows")`.
+    - Use SQL: `spark.sql("WHERE col IN ('?', '-')")`.
+    - Optimize: Filter specific columns.
+    - Log: `logging.debug("Filtered rows")`.
 
 - **spark_df.count()**
   - **Where Used**: Line 72.
-  - **How Used**: `counts = spark_df.filter(...).count()` – Counts filtered rows.
-  - **Purpose**: Quantifies special character occurrences.
+  - **How Used**: `counts = spark_df.filter(...).count()`.
+  - **Purpose**: Quantifies special characters.
+  - **Basic Definition**: A DataFrame method that returns the number of rows.
   - **Improvement Suggestions**:
-    - Cache DataFrame for multiple counts: `spark_df.cache()`.
-    - Handle empty results: `counts = count() or 0`.
-    - Log count: `logging.debug("Counted {counts} rows")`.
+    - Cache: `spark_df.cache()`.
+    - Handle empty: `counts = count() or 0`.
+    - Log: `logging.debug("Counted {counts}")`.
 
 - **spark_df.fillna()**
   - **Where Used**: Lines 76, 78.
-  - **How Used**:
-    - `spark_df = spark_df.fillna({c: 0})` – Fills numeric nulls.
-    - `spark_df = spark_df.fillna({c: "Unknown"})` – Fills string nulls.
-  - **Purpose**: Replaces null values for data consistency.
+  - **How Used**: `spark_df.fillna({c: 0})`, `spark_df.fillna({c: "Unknown"})`.
+  - **Purpose**: Replaces nulls.
+  - **Basic Definition**: A DataFrame method that fills null values with specified values.
   - **Improvement Suggestions**:
-    - Use single `fillna()` call: `fillna({c: 0 for c in numeric_cols})`.
-    - Validate post-filling: `assert spark_df.filter(pyspark_col(c).isNull()).count() == 0`.
-    - Log operation: `logging.info("Filled nulls in Spark DataFrame")`.
+    - Single call: `fillna({c: 0 for c in numeric_cols})`.
+    - Validate: `assert spark_df.filter(c.isNull()).count() == 0`.
+    - Log: `logging.info("Filled nulls")`.
 
 - **when()**
   - **Where Used**: Line 80.
-  - **How Used**: `when(pyspark_col(c).isin("?", "-", ""), "Unknown").otherwise(pyspark_col(c))` – Conditional replacement.
-  - **Purpose**: Replaces special characters in string columns with "Unknown".
+  - **How Used**: `when(pyspark_col(c).isin("?", "-", ""), "Unknown").otherwise(...)`.
+  - **Purpose**: Replaces special characters.
+  - **Basic Definition**: A PySpark function that applies conditional logic to columns, similar to CASE in SQL.
   - **Improvement Suggestions**:
-    - Use `coalesce` for null handling: `coalesce(pyspark_col(c), lit("Unknown"))`.
-    - Validate replacements: `assert spark_df.filter(pyspark_col(c).isin("?", "-")).count() == 0`.
-    - Log replacement: `logging.info("Replaced special characters in {c}")`.
+    - Use `coalesce`: `coalesce(c, lit("Unknown"))`.
+    - Validate: `assert spark_df.filter(c.isin("?", "-")).count() == 0`.
+    - Log: `logging.info("Replaced in {c}")`.
 
 - **spark_df.withColumn()**
   - **Where Used**: Line 80.
-  - **How Used**: `spark_df = spark_df.withColumn(c, when(...))` – Updates column with replacements.
-  - **Purpose**: Applies conditional logic to update string columns.
+  - **How Used**: `spark_df.withColumn(c, when(...))`.
+  - **Purpose**: Updates columns.
+  - **Basic Definition**: A DataFrame method that adds or replaces a column with new values.
   - **Improvement Suggestions**:
-    - Chain transformations: Combine multiple `withColumn` calls.
-    - Optimize execution: Use `persist()` for complex pipelines.
-    - Log update: `logging.info("Updated column {c}")`.
+    - Chain calls: Combine multiple updates.
+    - Optimize: `persist()` for pipelines.
+    - Log: `logging.info("Updated {c}")`.
 
 - **spark_df.toPandas()**
   - **Where Used**: Line 85.
-  - **How Used**: `pandas_df = spark_df.toPandas()` – Converts Spark DataFrame to Pandas.
-  - **Purpose**: Enables Pandas-based exporting for formats not natively supported by Spark.
+  - **How Used**: `pandas_df = spark_df.toPandas()`.
+  - **Purpose**: Converts to Pandas for exporting.
+  - **Basic Definition**: A DataFrame method that converts a Spark DataFrame to a Pandas DataFrame, collecting data to the driver.
   - **Improvement Suggestions**:
-    - Avoid for large datasets: Use native Spark writes (e.g., `write.csv()`).
-    - Handle memory errors: `try: toPandas() except MemoryError`.
-    - Log conversion: `logging.info("Converted Spark to Pandas DataFrame")`.
+    - Avoid for large data: Use `write.csv()`.
+    - Handle errors: `try: toPandas() except MemoryError`.
+    - Log: `logging.info("Converted to Pandas")`.
 
 - **spark.read.json()**
   - **Where Used**: Line 146.
-  - **How Used**: `spark_json = spark.read.json(f"{base_dir}/PySpark/titanic_spark_cleaned.json")`.
-  - **Purpose**: Re-imports cleaned JSON data for verification.
+  - **How Used**: `spark.read.json(...)`.
+  - **Purpose**: Re-imports JSON.
+  - **Basic Definition**: A Spark method that reads JSON files into a DataFrame, supporting JSON Lines.
   - **Improvement Suggestions**:
-    - Specify schema: `read.json(..., schema=...)`.
-    - Handle corrupt JSON: `try: read.json(...) except AnalysisException`.
-    - Log import: `logging.info("Imported JSON into Spark")`.
+    - Specify schema: `schema=...`.
+    - Handle errors: `try: read.json(...) except AnalysisException`.
+    - Log: `logging.info("Imported JSON")`.
 
 - **spark.read.parquet()**
   - **Where Used**: Line 148.
-  - **How Used**: `spark_parquet = spark.read.parquet(f"{base_dir}/PySpark/titanic_spark_cleaned.parquet")`.
-  - **Purpose**: Re-imports cleaned Parquet data for verification.
+  - **How Used**: `spark.read.parquet(...)`.
+  - **Purpose**: Re-imports Parquet.
+  - **Basic Definition**: A Spark method that reads Parquet files into a DataFrame, optimized for columnar storage.
   - **Improvement Suggestions**:
-    - Validate Parquet schema: `assert spark_parquet.schema == expected_schema`.
-    - Handle file errors: `try: read.parquet(...) except AnalysisException`.
-    - Log import: `logging.info("Imported Parquet into Spark")`.
+    - Validate schema: `assert schema == expected`.
+    - Handle errors: `try: read.parquet(...) except AnalysisException`.
+    - Log: `logging.info("Imported Parquet")`.
 
 - **spark.stop()**
   - **Where Used**: Lines 98, 150.
-  - **How Used**: `spark.stop()` – Terminates Spark session.
-  - **Purpose**: Releases resources after processing to prevent memory leaks.
+  - **How Used**: `spark.stop()`.
+  - **Purpose**: Terminates Spark session.
+  - **Basic Definition**: A SparkSession method that shuts down the Spark context, releasing resources.
   - **Improvement Suggestions**:
-    - Ensure called in all exit paths: Use `finally` block.
-    - Log termination: `logging.info("Stopped Spark session")`.
-    - Verify session state: `assert spark._jsc is None`.
+    - Use `finally`: Ensure called on exit.
+    - Log: `logging.info("Stopped Spark")`.
+    - Verify: `assert spark._jsc is None`.
 
 ##### 4. SQL Components
-These are SQL queries and SQLAlchemy methods for database interactions (`from sqlalchemy import create_engine`).
+These include SQLAlchemy methods and SQL queries (`from sqlalchemy import create_engine`).
 
 - **create_engine()**
   - **Where Used**: Line 104.
-  - **How Used**: `engine = create_engine(connection_string)` – Creates a database engine.
-  - **Purpose**: Establishes a connection to MS SQL Server for data storage and querying.
+  - **How Used**: `engine = create_engine(connection_string)`.
+  - **Purpose**: Connects to SQL Server.
+  - **Basic Definition**: A SQLAlchemy function that creates a database engine for executing SQL queries and managing connections.
   - **Improvement Suggestions**:
-    - Use connection pooling: `create_engine(..., pool_size=5)`.
-    - Secure credentials: Store in `.env` using `python-dotenv`.
-    - Log connection: `logging.info("Created SQLAlchemy engine")`.
+    - Pool connections: `pool_size=5`.
+    - Secure credentials: Use `.env`.
+    - Log: `logging.info("Created engine")`.
 
 - **SQL Query (null_query)**
-  - **Where Used**: Lines 112-124 (executed via `pd.read_sql` on line 118).
-  - **How Used**: Multi-column CASE statement to count nulls: `SELECT SUM(CASE WHEN PassengerId IS NULL THEN 1 ELSE 0 END) AS PassengerId_nulls, ...`.
-  - **Purpose**: Validates data quality by counting nulls in the `TitanicCleaned` table.
+  - **Where Used**: Lines 112-124 (executed on line 118).
+  - **How Used**: Counts nulls: `SELECT SUM(CASE WHEN PassengerId IS NULL THEN 1 ELSE 0 END)...`.
+  - **Purpose**: Validates data quality.
+  - **Basic Definition**: A SQL query using CASE statements to count null values per column in a table.
   - **Improvement Suggestions**:
-    - Optimize query: Use COUNT(*) with WHERE for performance.
-    - Parameterize query: Avoid hardcoding table names.
-    - Log query execution: `logging.info("Ran null count query")`.
+    - Optimize: Use `COUNT(*) WHERE col IS NULL`.
+    - Parameterize: Avoid hardcoding.
+    - Log: `logging.info("Ran null query")`.
 
 - **SQL Query (check_query)**
-  - **Where Used**: Lines 126-132 (executed via `pd.read_sql` on line 126).
-  - **How Used**: Checks special characters: `SELECT SUM(CASE WHEN Name IN ('?', '-', '') THEN 1 ELSE 0 END) AS Name_issues, ...`.
-  - **Purpose**: Ensures no problematic values remain in string columns.
+  - **Where Used**: Lines 126-132 (executed on line 126).
+  - **How Used**: Checks special characters: `SELECT SUM(CASE WHEN Name IN ('?', '-', '')...)`.
+  - **Purpose**: Ensures clean string columns.
+  - **Basic Definition**: A SQL query using CASE to count rows with specific values (e.g., "?", "-").
   - **Improvement Suggestions**:
-    - Use LIKE for flexibility: `Name LIKE '%[?-]%'`.
-    - Validate results: `assert issue_counts.eq(0).all().all()`.
-    - Log results: `logging.info("Checked special characters in SQL")`.
+    - Use LIKE: `LIKE '%[?-]%'`.
+    - Validate: `assert issues.eq(0).all()`.
+    - Log: `logging.info("Checked characters")`.
 
 ##### 5. Other Library Components
-These are components from `requests`, `io`, `os`, and `reportlab`.
+These are from `requests`, `io`, `os`, and `reportlab`.
 
 - **requests.get()**
   - **Where Used**: Line 18.
-  - **How Used**: `response = requests.get(url)` – Downloads the Titanic dataset.
-  - **Purpose**: Fetches CSV data from a URL for processing.
+  - **How Used**: `response = requests.get(url)`.
+  - **Purpose**: Downloads dataset.
+  - **Basic Definition**: A function in the `requests` library that sends an HTTP GET request and returns the response.
   - **Improvement Suggestions**:
-    - Handle network errors: `try: requests.get(...) except requests.RequestException`.
-    - Add timeout: `requests.get(..., timeout=10)`.
-    - Log download: `logging.info("Downloaded dataset from {url}")`.
+    - Handle errors: `try: requests.get(...) except RequestException`.
+    - Add timeout: `timeout=10`.
+    - Log: `logging.info("Downloaded {url}")`.
 
 - **io.StringIO()**
   - **Where Used**: Line 24.
-  - **How Used**: `io.StringIO(response.text)` – Converts HTTP response to a file-like object.
-  - **Purpose**: Enables Pandas to read CSV data directly from memory.
+  - **How Used**: `io.StringIO(response.text)`.
+  - **Purpose**: Converts response to file-like object.
+  - **Basic Definition**: A class in the `io` module that creates an in-memory text buffer behaving like a file.
   - **Improvement Suggestions**:
-    - Validate response content: `assert response.text, "Empty response"`.
-    - Handle encoding errors: `try: io.StringIO(...) except UnicodeDecodeError`.
-    - Log operation: `logging.debug("Created StringIO buffer")`.
+    - Validate content: `assert response.text`.
+    - Handle errors: `try: io.StringIO(...) except UnicodeDecodeError`.
+    - Log: `logging.debug("Created StringIO")`.
 
 - **SimpleDocTemplate()**
   - **Where Used**: Lines 52, 92, 128.
-  - **How Used**: `pdf = SimpleDocTemplate(f"{base_dir}/.../titanic_..._cleaned.pdf", pagesize=letter)` – Initializes PDF document.
-  - **Purpose**: Sets up PDF output for exporting DataFrame data.
+  - **How Used**: `SimpleDocTemplate(f"{base_dir}/.../titanic_..._cleaned.pdf", pagesize=letter)`.
+  - **Purpose**: Initializes PDF.
+  - **Basic Definition**: A `reportlab` class that creates a PDF document with specified page size and layout.
   - **Improvement Suggestions**:
-    - Customize styling: Add fonts or margins for better visuals.
-    - Handle file errors: `try: SimpleDocTemplate(...) except OSError`.
-    - Log creation: `logging.info("Initialized PDF document")`.
+    - Style: Add fonts, margins.
+    - Handle errors: `try: SimpleDocTemplate(...) except OSError`.
+    - Log: `logging.info("Initialized PDF")`.
 
 - **Table()**
   - **Where Used**: Lines 53, 93, 129.
-  - **How Used**: `table = Table([df.columns.tolist()] + df.values.tolist())` – Creates a table from DataFrame data.
-  - **Purpose**: Formats data as a table for PDF export.
+  - **How Used**: `Table([df.columns.tolist()] + df.values.tolist())`.
+  - **Purpose**: Formats data for PDF.
+  - **Basic Definition**: A `reportlab` class that creates a table for PDF documents from a list of lists.
   - **Improvement Suggestions**:
-    - Add styling: `Table(..., style=[("GRID", (0,0), (-1,-1), 1, colors.black)])`.
-    - Validate data size: `assert len(df) < max_rows, "Table too large"`.
-    - Log table creation: `logging.info("Created PDF table")`.
+    - Add styling: `style=[("GRID", ...)]`.
+    - Validate size: `assert len(df) < max_rows`.
+    - Log: `logging.info("Created table")`.
 
 - **pdf.build()**
   - **Where Used**: Lines 54, 94, 130.
-  - **How Used**: `pdf.build([table])` – Generates the PDF file.
-  - **Purpose**: Finalizes and saves the PDF document.
+  - **How Used**: `pdf.build([table])`.
+  - **Purpose**: Generates PDF.
+  - **Basic Definition**: A `reportlab` method that builds and saves a PDF document from flowable elements (e.g., tables).
   - **Improvement Suggestions**:
-    - Handle build errors: `try: pdf.build(...) except ReportLabError`.
-    - Add metadata: `pdf.setTitle("Titanic Data")`.
-    - Log completion: `logging.info("Built PDF file")`.
+    - Handle errors: `try: build(...) except ReportLabError`.
+    - Add metadata: `setTitle("Titanic Data")`.
+    - Log: `logging.info("Built PDF")`.
 
 ---
 
 #### Technologies Categorized
-The components are grouped into the following technologies based on their library or language:
-
 - **Python**:
-  - Built-in: `print()`, `open()`, `with`, `for`, `if`.
-  - Standard Library: `os.makedirs()`, `os.environ`, `io.StringIO()`.
-  - **Purpose**: Core scripting, file handling, and environment setup.
+  - Components: `print()`, `open()`, `with`, `os.makedirs()`, `os.environ`, `for`, `if`, `io.StringIO()`.
+  - Definition: Core Python language and standard library for scripting, file handling, and control flow.
+  - Usage: Setup, logging, I/O.
 
 - **Pandas**:
-  - `pd.read_csv()`, `df.isna()`, `df.select_dtypes()`, `df.fillna()`, `df.replace()`, `df.to_csv()`, `df.to_json()`, `df.to_excel()`, `pd.read_json()`, `pd.read_excel()`, `df.to_sql()`, `pd.read_sql()`.
-  - **Purpose**: In-memory data manipulation, cleaning, and exporting.
+  - Components: `pd.read_csv()`, `df.isna()`, `df.select_dtypes()`, `df.fillna()`, `df.replace()`, `df.to_csv()`, `df.to_json()`, `df.to_excel()`, `pd.read_json()`, `pd.read_excel()`, `df.to_sql()`, `pd.read_sql()`.
+  - Definition: A Python library for in-memory data manipulation and analysis using DataFrames.
+  - Usage: Data cleaning, exporting.
 
 - **PySpark**:
-  - `SparkSession.builder.appName().getOrCreate()`, `spark.read.csv()`, `spark_df.show()`, `pyspark_col()`, `spark_df.select()`, `spark_df.groupBy().sum()`, `spark_df.filter()`, `spark_df.count()`, `spark_df.fillna()`, `when()`, `spark_df.withColumn()`, `spark_df.toPandas()`, `spark.read.json()`, `spark.read.parquet()`, `spark.stop()`.
-  - **Purpose**: Distributed data processing and exporting.
+  - Components: `SparkSession.builder.appName().getOrCreate()`, `spark.read.csv()`, `spark_df.show()`, `pyspark_col()`, `spark_df.select()`, `spark_df.groupBy().sum()`, `spark_df.filter()`, `spark_df.count()`, `spark_df.fillna()`, `when()`, `spark_df.withColumn()`, `spark_df.toPandas()`, `spark.read.json()`, `spark.read.parquet()`, `spark.stop()`.
+  - Definition: A Python API for Apache Spark, enabling distributed data processing with DataFrames.
+  - Usage: Distributed processing, exporting.
 
 - **SQL**:
-  - SQLAlchemy: `create_engine()`.
-  - Queries: `null_query`, `check_query` (executed via `pd.read_sql`).
-  - **Purpose**: Database storage, querying, and validation.
+  - Components: `create_engine()`, `null_query`, `check_query`.
+  - Definition: SQLAlchemy for database connections and SQL queries for data manipulation.
+  - Usage: Database storage, validation.
 
 - **Other Libraries**:
-  - `requests.get()`: Data downloading.
-  - `SimpleDocTemplate()`, `Table()`, `pdf.build()`: PDF generation.
-  - **Purpose**: Support data acquisition and alternative output formats.
+  - Components: `requests.get()`, `SimpleDocTemplate()`, `Table()`, `pdf.build()`.
+  - Definition: External libraries for HTTP requests (`requests`) and PDF generation (`reportlab`).
+  - Usage: Data acquisition, PDF output.
 
 ---
 
-#### Purpose and Usage Summary
-- **Data Acquisition**: `requests.get()`, `io.StringIO()` download and prepare the dataset (lines 18-24).
-- **Directory Setup**: `os.makedirs()`, `os.environ` configure the environment (lines 12-14, 59).
-- **Data Processing**:
-  - Pandas (`pd.read_csv`, `df.fillna`, etc.) handles in-memory cleaning (lines 24-55).
-  - PySpark (`spark.read.csv`, `spark_df.fillna`, etc.) demonstrates distributed processing (lines 60-98).
-  - SQL (`create_engine`, `to_sql`, queries) manages database operations (lines 104-132).
-- **Exporting**: `to_csv`, `to_json`, `to_excel`, `SimpleDocTemplate`, etc., save data in multiple formats (lines 46-130).
-- **Verification**: Re-imports via `pd.read_*`, `spark.read.*` confirm data integrity (lines 134-155).
-- **Logging**: `print()` tracks progress across all sections (40-45 instances).
+#### Purpose Summary
+- **Acquisition**: `requests.get()`, `io.StringIO()` fetch and prepare data (lines 18-24).
+- **Setup**: `os.makedirs()`, `os.environ` configure environment (lines 12-14, 59).
+- **Processing**:
+  - Pandas: `read_csv`, `fillna`, etc. (lines 24-55).
+  - PySpark: `read.csv`, `fillna`, etc. (lines 60-98).
+  - SQL: `to_sql`, queries (lines 104-132).
+- **Exporting**: `to_csv`, `to_json`, `SimpleDocTemplate`, etc. (lines 46-130).
+- **Verification**: `read_*` re-imports data (lines 134-155).
+- **Logging**: `print()` tracks progress (40-45 instances).
 
 ---
 
-#### Improvements and Feature Enhancements
-- **Error Handling**: Add try-except blocks for all I/O and database operations (e.g., `requests.get`, `to_sql`) to handle network, file, or connection errors.
-- **Logging**: Replace `print()` with `logging` for structured, file-based logging with levels (DEBUG, INFO, ERROR).
-- **Configuration Management**: Externalize paths and connection strings to a `.env` file using `python-dotenv` for flexibility.
-- **Modularity**: Refactor into functions (e.g., `clean_data(df)`, `export_data(df, formats)`) to reduce repetition and improve maintainability.
+#### Improvements
+- **Error Handling**: Add try-except for I/O, database, and network operations.
+- **Logging**: Use `logging` instead of `print()` for structured logs.
+- **Configuration**: Externalize paths and credentials to `.env`.
+- **Modularity**: Refactor into functions (e.g., `clean_data`, `export_data`).
 - **Performance**:
-  - Pandas: Use chunking for large datasets (`read_csv(..., chunksize=1000)`).
-  - PySpark: Avoid `toPandas()`; use native writes (`write.csv()`).
-  - SQL: Optimize queries with indexes and use connection pooling.
-- **Validation**: Add assertions or checks post-cleaning/export (e.g., `assert df.isna().sum().sum() == 0`).
-- **Testing**: Implement unit tests using `pytest` for functions like cleaning and exporting to ensure reliability.
-- **Security**: Secure SQL credentials using environment variables or a secrets manager.
-- **Feature Enhancements**:
-  - Add data profiling: Use `pandas-profiling` to generate dataset reports.
-  - Support incremental updates: Check existing data before overwriting tables/files.
-  - Parallelize exports: Use `multiprocessing` for simultaneous format exports.
+  - Pandas: Chunk large datasets.
+  - PySpark: Use native writes, avoid `toPandas()`.
+  - SQL: Index tables, pool connections.
+- **Validation**: Assert data quality post-cleaning/export.
+- **Testing**: Use `pytest` for unit tests.
+- **Security**: Secure SQL credentials.
+- **Features**:
+  - Profile data with `pandas-profiling`.
+  - Support incremental updates.
+  - Parallelize exports with `multiprocessing`.
 
 ---
 
-#### Report on Technologies
-- **Python**:
-  - **Used**: Core scripting, file handling, and logging.
-  - **Where**: Throughout (e.g., lines 12-19 for setup, 23-155 for logging).
-  - **How**: Manages environment (`os.makedirs`), I/O (`open`), and control flow (`for`, `if`).
-  - **Purpose**: Provides the foundation for the ETL pipeline.
-  - **Improvement**: Enhance with `logging` and error handling for production readiness.
+### Survey Note: Comprehensive Component Analysis with Definitions
 
-- **Pandas**:
-  - **Used**: Data manipulation and exporting.
-  - **Where**: Lines 24-55 (processing), 134-154 (imports/exports).
-  - **How**: Loads (`read_csv`), cleans (`fillna`, `replace`), and exports (`to_csv`, `to_json`).
-  - **Purpose**: Efficient in-memory processing for small datasets like Titanic.
-  - **Improvement**: Add chunking for scalability, validate outputs.
-
-- **PySpark**:
-  - **Used**: Distributed data processing.
-  - **Where**: Lines 60-98 (processing), 142-150 (imports).
-  - **How**: Loads (`read.csv`), cleans (`fillna`, `when`), and converts (`toPandas`).
-  - **Purpose**: Demonstrates big data capabilities, though overkill for Titanic dataset.
-  - **Improvement**: Use native Spark writes, optimize partitioning.
-
-- **SQL**:
-  - **Used**: Database storage and querying.
-  - **Where**: Lines 104-132 (database ops), 150-154 (imports).
-  - **How**: Stores data (`to_sql`), validates (`read_sql` with queries).
-  - **Purpose**: Persists data for relational storage and analysis.
-  - **Improvement**: Secure credentials, optimize queries, use pooling.
-
-- **Other Libraries**:
-  - **Used**: Data acquisition (`requests`), PDF generation (`reportlab`).
-  - **Where**: Lines 18 (`requests`), 52-130 (`reportlab`).
-  - **How**: Downloads data (`get`), creates PDFs (`SimpleDocTemplate`).
-  - **Purpose**: Extends functionality beyond core ETL.
-  - **Improvement**: Add error handling, customize PDF outputs.
-
----
-
-### Survey Note: Comprehensive Component Analysis of `titanic_example.py`
-
-This analysis, conducted at 05:34 AM PDT on Saturday, April 12, 2025, reviews all components in `titanic_example.py` from a Senior Data Engineer’s perspective. The script processes the Titanic dataset, demonstrating ETL processes across Python, Pandas, PySpark, SQL, and supporting libraries.
+This analysis, conducted at 05:54 AM PDT on Saturday, April 12, 2025, catalogs all components in `titanic_example.py`, providing definitions, usage, and improvements. The script processes the Titanic dataset using Python, Pandas, PySpark, SQL, and supporting libraries.
 
 #### Executive Summary
 
 **Purpose:**  
-The script downloads, processes, cleans, and analyzes the Titanic dataset from [this website](https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv). It uses Pandas, PySpark, and MS SQL Server to clean null values and special characters ("?", "-", ""), exports data in CSV, JSON, Excel, PDF, and Parquet formats, stores it in SQL Server tables, and verifies by re-importing cleaned data. It serves an educational purpose, showcasing ETL/ELT pipeline development.
+The script downloads, cleans, and analyzes the Titanic dataset from [this website](https://raw.githubusercontent.com/datasciencedojo/datasets/master/titanic.csv), using Pandas, PySpark, and SQL Server. It cleans nulls and special characters, exports data in multiple formats, stores it in SQL tables, and verifies imports, serving educational ETL purposes.
 
 **Line Count:**  
-The script contains **242 lines**, verified by the provided script, including imports, setup, processing, exporting, and verification steps.
+242 lines, covering imports, setup, processing, exporting, and verification.
 
 **Components Overview:**  
-The script uses components from Python (`print`, `open`, etc.), Pandas (`read_csv`, `fillna`, etc.), PySpark (`SparkSession`, `read.csv`, etc.), SQL (`create_engine`, queries), and other libraries (`requests.get`, `SimpleDocTemplate`, etc.). Each component is mapped to its usage, purpose, and improvement opportunities.
+Includes Python (`print`, `open`), Pandas (`read_csv`, `fillna`), PySpark (`SparkSession`, `read.csv`), SQL (`create_engine`, queries), and others (`requests.get`, `SimpleDocTemplate`). Each is defined and mapped to its usage.
 
 #### Detailed Analysis
 
 **Component Mapping**:
-- **Python**: Core scripting with `print` (40-45 uses), `open` (line 19), `os.makedirs` (lines 12-14), etc., for setup and logging.
-- **Pandas**: Data manipulation with `read_csv` (lines 24, 106, 134), `fillna` (line 38), `to_csv` (lines 46, 86, 120), etc., for in-memory processing.
-- **PySpark**: Distributed processing with `SparkSession` (lines 60, 142), `read.csv` (lines 62, 144), `fillna` (lines 76, 78), etc., for big data demo.
-- **SQL**: Database ops with `create_engine` (line 104), `to_sql` (lines 108, 110), and queries (lines 112-132) for storage and validation.
-- **Other**: `requests.get` (line 18) for data acquisition, `SimpleDocTemplate` (lines 52, 92, 128) for PDF output.
+- **Python**: `print` (40-45 uses), `open` (line 19), etc., for scripting and logging.
+- **Pandas**: `read_csv` (lines 24, 106, 134), `fillna` (line 38), etc., for data manipulation.
+- **PySpark**: `SparkSession` (lines 60, 142), `read.csv` (lines 62, 144), etc., for distributed processing.
+- **SQL**: `create_engine` (line 104), queries (lines 112-132), for database ops.
+- **Other**: `requests.get` (line 18), `SimpleDocTemplate` (lines 52, 92, 128), for data and PDF output.
 
-**Usage Patterns**:
-- Components are used sequentially across sections (Pandas, PySpark, SQL, Bonus), with `print` for progress tracking.
-- Data flows from download (`requests.get`) to cleaning (`fillna`, `replace`) to export (`to_csv`, `build`) and verification (`read_*`).
-- Repetitive patterns (e.g., exporting in multiple formats) suggest refactoring opportunities.
+**Definitions**:
+- Provided for each component, ensuring clarity (e.g., `print`: outputs to console, `read_csv`: reads CSV to DataFrame).
 
-**Improvement Opportunities**:
-- **Robustness**: Add try-except for all I/O, network, and database operations.
-- **Maintainability**: Refactor into functions, add docstrings, and follow PEP 8.
-- **Performance**: Optimize PySpark by avoiding `toPandas`, use Pandas chunking, and index SQL tables.
-- **Security**: Secure SQL credentials in environment variables.
-- **Features**: Add data profiling, incremental updates, or parallel exports.
+**Improvements**:
+- Enhance robustness, modularity, and performance.
+- Add logging, testing, and security.
 
 #### Final Recommendations
-- **Component Optimization**: Streamline repetitive tasks (e.g., exports) into reusable functions to reduce code duplication.
-- **Production Readiness**: Implement logging, error handling, and configuration management for scalability.
-- **Testing**: Add unit tests for critical components (e.g., `clean_data`, `export_data`) using `pytest`.
-- **Documentation**: Include comments and docstrings to clarify component usage and purpose.
-
-This analysis ensures all components are identified, accurately mapped, and evaluated for improvements, correcting prior errors and aligning with the script’s 242-line structure.
+- **Optimize**: Refactor repetitive code, optimize queries.
+- **Productionize**: Add logging, error handling, configs.
+- **Document**: Include docstrings for clarity.
 
 #### Key Citations
-- [Python Standard Library Documentation](https://docs.python.org/3/library/)
+- [Python Documentation](https://docs.python.org/3/)
 - [Pandas Documentation](https://pandas.pydata.org/docs/)
-- [Apache Spark PySpark Documentation](https://spark.apache.org/docs/latest/api/python/index.html)
+- [PySpark Documentation](https://spark.apache.org/docs/latest/api/python/)
 - [SQLAlchemy Documentation](https://docs.sqlalchemy.org/en/20/)
 - [Requests Documentation](https://docs.python-requests.org/en/master/)
-- [ReportLab Documentation](https://www.reportlab.com/docs/reportlab-userguide.pdf)
+- [ReportLab Documentation](https://www.reportlab.com/docs/)
