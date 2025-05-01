@@ -1,35 +1,36 @@
-**ETL PipeLine 1**
-ETL Pipeline for Multiple Databases
-This project implements an ETL (Extract, Transform, Load) pipeline that connects to MSSQL, Oracle, PostgreSQL, and MySQL databases, extracts data using SQL queries, and saves results to Excel files.
-Features
+# ETL Pipeline for Multiple Databases
 
-Supports MSSQL, Oracle, PostgreSQL, and MySQL databases.
-Configurable via YAML files for each database
-Logging to file and console.
+This project implements an ETL (Extract, Transform, Load) pipeline that connects to MSSQL, Oracle, PostgreSQL, and MySQL databases, extracts data using SQL queries,  and saves results to Excel files.
 
-Prerequisites
+## Features
+- Supports MSSQL, Oracle, PostgreSQL, and MySQL databases.
+- Configurable via YAML files for each database.
+- Logging to file and console.
 
-Python 3.9+
-Oracle Instant Client (for Oracle)
-ODBC Driver 17 for SQL Server (for MSSQL)
-PostgreSQL and MySQL servers
-Conda environment (recommended)
+## Prerequisites
+- Python 3.9+
+- Oracle Instant Client (for Oracle)
+- ODBC Driver 17 for SQL Server (for MSSQL)
+- PostgreSQL and MySQL servers
+- Conda environment (recommended)
 
+## Installation
 
+1. Create and activate a Conda environment:
+   ```bash
+   conda create -n etl_env python=3.9
+   conda activate etl_env
+   ```
 
-Create and activate a Conda environment:conda create -n etl_env python=3.9
-conda activate etl_env
-
-
-Configuration
+## Configuration
 Edit the YAML config files in the project root:
+- `mssql_config.yaml`: MSSQL settings.
+- `oracle_config.yaml`: Oracle settings.
+- `postgresql_config.yaml`: PostgreSQL settings.
+- `mysql_config.yaml`: MySQL settings.
 
-mssql_config.yaml: MSSQL settings.
-oracle_config.yaml: Oracle settings.
-postgresql_config.yaml: PostgreSQL settings.
-mysql_config.yaml: MySQL settings.
-
-Example (mssql_config.yaml):
+Example (`mssql_config.yaml`):
+```yaml
 database:
   type: mssql
   host: INSTANCE-202504\SQLEXPRESS
@@ -40,24 +41,23 @@ database:
 query: SELECT * FROM products WHERE stock > 0
 output:
   file_path: output/products_transformed.xlsx
+```
 
-Usage
-
-Run ETL pipeline:python etl_pipeline.py
-
-
-Uses the config file specified in etl_pipeline.py (Eg; oracle_config.yaml).
-
-
+## Usage
+1. Run ETL pipeline:
+   ```bash
+   python etl_pipeline.py
+   ```
+   - Uses the config file specified in `etl_pipeline.py`(Eg; `oracle_config.yaml`).
 
 
-Output
+## Output
+- Excel files in the `output/` directory (e.g., `products_transformed.xlsx`, `high_value_customers_transformed.xlsx`).
+- Logs in `etl_pipeline.log`.
 
-Excel files in the output/ directory (e.g., products_transformed.xlsx, high_value_customers_transformed.xlsx).
-Logs in etl_pipeline.log.
-
-Project Structure
-etl-pipeline/
+## Project Structure
+```
+etl_1/
 │
 ├── etl_pipeline.py           # Main ETL script
 ├── logging_config.yaml      # Logging configuration
@@ -68,4 +68,5 @@ etl-pipeline/
 ├── output/                  # Output Excel files
 ├── etl_pipeline.log         # Log file
 ├── README.md                # Project documentation
+```
 
