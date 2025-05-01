@@ -1,0 +1,10 @@
+database:
+  type: postgresql
+  host: localhost
+  port: 5432
+  name: test_db
+  user: postgres
+  password: 1234
+query: SELECT * FROM employees
+output:
+  file_path: output/employees.xlsx

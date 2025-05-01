@@ -1,0 +1,26 @@
+2025-05-01 03:03:32,093 - __main__ - INFO - Logging configured successfully
+2025-05-01 03:03:32,175 - __main__ - INFO - Configuration loaded from postgres_config.yaml
+2025-05-01 03:03:32,276 - __main__ - INFO - Generated connection string for postgresql
+2025-05-01 03:03:32,729 - __main__ - INFO - Successfully connected to postgresql database
+2025-05-01 03:03:33,393 - __main__ - INFO - Query executed successfully. Retrieved 4 rows.
+2025-05-01 03:03:35,395 - __main__ - INFO - Data saved to output/employees.xlsx
+2025-05-01 03:03:35,469 - __main__ - INFO - ETL pipeline completed successfully
+2025-05-01 03:04:25,406 - __main__ - INFO - Logging configured successfully
+2025-05-01 03:04:25,428 - __main__ - INFO - Configuration loaded from mysql_config.yaml
+2025-05-01 03:04:25,433 - __main__ - INFO - Generated connection string for mysql
+2025-05-01 03:04:25,908 - __main__ - INFO - Successfully connected to mysql database
+2025-05-01 03:04:26,166 - __main__ - INFO - Query executed successfully. Retrieved 3 rows.
+2025-05-01 03:04:27,041 - __main__ - INFO - Data saved to output/orders.xlsx
+2025-05-01 03:04:27,043 - __main__ - INFO - ETL pipeline completed successfully
+2025-05-01 03:04:46,923 - __main__ - INFO - Logging configured successfully
+2025-05-01 03:04:46,945 - __main__ - INFO - Configuration loaded from mssql_config.yaml
+2025-05-01 03:04:47,610 - __main__ - INFO - Successfully connected to mssql database
+2025-05-01 03:04:48,008 - __main__ - INFO - Query executed successfully. Retrieved 3 rows.
+2025-05-01 03:04:49,239 - __main__ - INFO - Data saved to output/products.xlsx
+2025-05-01 03:04:49,256 - __main__ - INFO - ETL pipeline completed successfully
+2025-05-01 03:05:21,370 - __main__ - INFO - Logging configured successfully
+2025-05-01 03:05:21,392 - __main__ - INFO - Configuration loaded from oracle_config.yaml
+2025-05-01 03:05:24,978 - __main__ - INFO - Successfully connected to oracle database
+2025-05-01 03:05:25,980 - __main__ - INFO - Query executed successfully. Retrieved 2 rows.
+2025-05-01 03:05:26,836 - __main__ - INFO - Data saved to output/high_value_customers.xlsx
+2025-05-01 03:05:26,839 - __main__ - INFO - ETL pipeline completed successfully

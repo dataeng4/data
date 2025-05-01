@@ -1,0 +1,10 @@
+database:
+  type: oracle
+  host: localhost
+  port: 1521
+  name: FREEPDB1
+  user: analytics_db
+  password: analytics123
+query: SELECT * FROM customers WHERE total_purchases > 1000
+output:
+  file_path: output/high_value_customers.xlsx

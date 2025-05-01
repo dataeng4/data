@@ -1,0 +1,10 @@
+database:
+  type: mssql
+  host: INSTANCE-202504\SQLEXPRESS
+  port: ''
+  name: inventory_db
+  user: sa
+  password: 1234
+query: SELECT * FROM products WHERE stock > 0
+output:
+  file_path: output/products.xlsx
