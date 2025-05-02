@@ -1,0 +1,28 @@
+2025-05-02 02:59:44,012 - __main__ - INFO - Logging configured successfully
+2025-05-02 02:59:44,103 - __main__ - INFO - Configuration loaded from config.yaml
+2025-05-02 02:59:44,106 - __main__ - INFO - Starting ETL for mssql
+2025-05-02 02:59:44,730 - __main__ - INFO - Successfully connected to mssql database
+2025-05-02 02:59:45,091 - __main__ - INFO - Query executed successfully. Retrieved 3 rows.
+2025-05-02 02:59:46,690 - __main__ - INFO - Data saved to output/products_mssql.xlsx
+2025-05-02 02:59:46,692 - __main__ - INFO - ETL pipeline completed successfully for mssql
+2025-05-02 02:59:46,694 - __main__ - INFO - Completed ETL for mssql
+2025-05-02 02:59:46,696 - __main__ - INFO - Starting ETL for oracle
+2025-05-02 02:59:52,725 - __main__ - INFO - Successfully connected to oracle database
+2025-05-02 02:59:54,006 - __main__ - INFO - Query executed successfully. Retrieved 2 rows.
+2025-05-02 02:59:54,069 - __main__ - INFO - Data saved to output/high_value_customers_oracle.xlsx
+2025-05-02 02:59:54,322 - __main__ - INFO - ETL pipeline completed successfully for oracle
+2025-05-02 02:59:54,356 - __main__ - INFO - Completed ETL for oracle
+2025-05-02 02:59:54,371 - __main__ - INFO - Starting ETL for postgresql
+2025-05-02 02:59:54,375 - __main__ - INFO - Generated connection string for postgresql
+2025-05-02 02:59:54,733 - __main__ - INFO - Successfully connected to postgresql database
+2025-05-02 02:59:55,248 - __main__ - INFO - Query executed successfully. Retrieved 4 rows.
+2025-05-02 02:59:55,382 - __main__ - INFO - Data saved to output/employees_postgresql.xlsx
+2025-05-02 02:59:55,404 - __main__ - INFO - ETL pipeline completed successfully for postgresql
+2025-05-02 02:59:55,407 - __main__ - INFO - Completed ETL for postgresql
+2025-05-02 02:59:55,409 - __main__ - INFO - Starting ETL for mysql
+2025-05-02 02:59:55,411 - __main__ - INFO - Generated connection string for mysql
+2025-05-02 02:59:55,962 - __main__ - INFO - Successfully connected to mysql database
+2025-05-02 02:59:56,268 - __main__ - INFO - Query executed successfully. Retrieved 3 rows.
+2025-05-02 02:59:56,330 - __main__ - INFO - Data saved to output/orders_mysql.xlsx
+2025-05-02 02:59:56,336 - __main__ - INFO - ETL pipeline completed successfully for mysql
+2025-05-02 02:59:56,434 - __main__ - INFO - Completed ETL for mysql
